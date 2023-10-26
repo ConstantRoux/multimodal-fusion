@@ -1,4 +1,4 @@
-from SlotData import dataOrd, DataType
+from SlotData import dataOrd
 
 
 class SlotArray:
