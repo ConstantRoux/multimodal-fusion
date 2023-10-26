@@ -44,13 +44,14 @@ class AcquisitionThread(threading.Thread):
             # measure time
             t_start = time.time()
 
-            # get a new data
-            data = Data(DataType.ACTION, 0)
+            # get list of data
+            data = [Data(DataType.ACTION, 0)]
             # TODO
 
             # if there is a new data
-            if data is not None:
-                self.slotArray.fifo.put(data)
+            if len(data) == 0:
+                for i in range(len(data)):
+                    self.slotArray.fifo.put(data[i])
 
                 # if there is not a running cycle
                 if not self.started:
@@ -66,8 +67,3 @@ class AcquisitionThread(threading.Thread):
 
             # wait to free cpu time
             time.sleep(0.01)
-
-
-if __name__ == '__main__':
-    slotArray = SlotArray()
-    acquisitionThread = AcquisitionThread(slotArray, 5.0, verbose=True)
