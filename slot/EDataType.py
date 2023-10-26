@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-dataOrd = 5
+data_ord = 5
 
 
 class DataType(Enum):
