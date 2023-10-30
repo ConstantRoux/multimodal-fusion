@@ -1,15 +1,11 @@
 from enum import Enum
 
 
-data_ord = 5
-
-
 class DataType(Enum):
     ACTION = 0
     SHAPE = 1
     COLOR = 2
-    POSITION_1 = 3
-    POSITION_2 = 4
+    POSITION = 3
 
 
 class ActionType(Enum):
@@ -19,7 +15,7 @@ class ActionType(Enum):
 
 
 class ShapeType(Enum):
-    SQUARE = 0
+    RECTANGLE = 0
     CIRCLE = 1
     TRIANGLE = 2
 
