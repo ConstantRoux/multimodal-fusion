@@ -3,66 +3,89 @@ from slot.EDataType import ActionType, ShapeType, ColorType
 
 
 class Command:
-    FOUND = 1
+    POSSIBLE = 0
     UNKNOWN = -1
 
-    def __init__(self, slotArray: list):
+    def __init__(self):
         # TODO compute confidence
         # args
-        self.slotArray = slotArray
+        self.slotArray = None
 
         # vars
         self.action = None
         self.color = None
         self.shape = None
         self.position = []
-        self.confidence = 0
+        self.confidence = 1.0
+        self.state = Command.UNKNOWN
 
-        # get the command
-        self.res = self.findCommand()
+    def clear(self):
+        self.action = None
+        self.color = None
+        self.shape = None
+        self.position = []
+        self.confidence = 1.0
+        self.state = Command.UNKNOWN
 
-    def findCommand(self) -> int:
+    def updateSlotArray(self, slotArray: list):
+        self.slotArray = slotArray
+
+    def fillParams(self):
+        # init params
+        self.position = []
+
         # for each data in the slot array
-        for i in range(len(self.slotArray)):
-            # get data as local variable
-            data: Data = self.slotArray[i]
+        for data in self.slotArray:
+            # update confidence
+            self.confidence *= data.confidence
 
             # switch between different data types
             # case ACTION
-            if data.dataType.value == data.dataType.ACTION:
+            if data.dataType == data.dataType.ACTION:
                 self.action: ActionType = data.value
             # case SHAPE
-            elif data.dataType.value == data.dataType.SHAPE:
+            elif data.dataType == data.dataType.SHAPE:
                 self.shape: ShapeType = data.value
             # case COLOR
-            elif data.dataType.value == data.dataType.COLOR:
+            elif data.dataType == data.dataType.COLOR:
                 self.color: ColorType = data.value
             # case POSITION
-            elif data.dataType.value == data.dataType.POSITION:
+            elif data.dataType == data.dataType.POSITION:
                 self.position.append(data.value)
 
-        # with the current data, try to find a possible command:
-        # (P.S.: with a feedback of the interface, it is possible to ask the next iteration to find a better command)
-        # action ADD: we need at least the action ADD and a shape (color and position set with default values)
-        if self.action is not None and self.action.value == ActionType.ADD:
+    def checkPossibility(self) -> int:
+        # fill params
+        self.fillParams()
+
+        # check possibility with the params
+        # action ADD
+        if self.action is not None and self.action == ActionType.ADD:
             if self.shape is not None:
-                return Command.FOUND
+                self.state = Command.POSSIBLE
+                return Command.POSSIBLE
+            else:
+                self.state = Command.UNKNOWN
+                return Command.UNKNOWN
 
-        # action MOVE: we need at least the action MOVE, a shape and two positions
-        if self.action is not None and self.action.value == ActionType.MOVE:
-            if self.shape is not None:
-                if len(self.position) >= 2:
-                    return Command.FOUND
+        # action MOVE
+        elif self.action is not None and self.action == ActionType.MOVE:
+            if (self.shape is not None and len(self.position) >= 1) or len(self.position) >= 2:
+                self.state = Command.POSSIBLE
+                return Command.POSSIBLE
+            else:
+                self.state = Command.UNKNOWN
+                return Command.UNKNOWN
 
-        # action DELETE: we need at least the action DELETE, a shape and one position
-        if self.action is not None and self.action.value == ActionType.DELETE:
-            if self.shape is not None:
-                if len(self.position) >= 1:
-                    return Command.FOUND
+        # action DELETE
+        elif self.action is not None and self.action == ActionType.DELETE:
+            if self.shape is not None or len(self.position) >= 1:
+                self.state = Command.POSSIBLE
+                return Command.POSSIBLE
+            else:
+                self.state = Command.UNKNOWN
+                return Command.UNKNOWN
 
-        # no command found
-        return Command.UNKNOWN
-
-    def print(self):
-        print(self.action, self.shape, self.color, self.position, self.confidence)
-        # TODO
+        # no action found
+        else:
+            self.state = Command.UNKNOWN
+            return Command.UNKNOWN

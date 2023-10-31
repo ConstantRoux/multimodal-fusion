@@ -1,5 +1,6 @@
 import queue
 import threading
+from process.Command import Command
 from slot.Data import Data
 
 
@@ -12,15 +13,22 @@ class SlotArray:
         # vars
         self.fifo = queue.Queue()
         self.slotArray = []
+        self.cmd = Command()
 
         # timer
         self.timer = None
 
     def stopHandle(self):
-        self.clear()
+        self.clear("timeout")
         if self.verbose:
             print("[SlotArray] Kill timer.")
-            print("[SlotArray] Clear slot array for reason: timeout.")
+
+    def stop(self, reason: str):
+        if self.timer is not None:
+            self.timer.cancel()
+            self.clear(reason)
+            if self.verbose:
+                print("[SlotArray] Kill timer.")
 
     def putFifo(self, data: Data):
         if self.timer is None or not self.timer.is_alive():
@@ -36,8 +44,12 @@ class SlotArray:
     def putArray(self, data: Data):
         self.slotArray.append(data)
 
-    def clear(self):
+    def clear(self, reason: str):
         self.slotArray = []
+        with self.fifo.mutex:
+            self.fifo.queue.clear()
+        if self.verbose:
+            print("[SlotArray] Clear slot array for reason:", reason + ".")
 
     def print(self):
         for i in range(len(self.slotArray)):
