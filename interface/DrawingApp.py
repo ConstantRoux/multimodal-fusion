@@ -146,9 +146,8 @@ class DrawingApp:
                                         y=cmd.position[0][1] if len(cmd.position) > 0 else None)
             if len(outputID) == 0:
                 return DrawingApp.IMPOSSIBLE
-            elif len(outputID) > 0:
-                for id in outputID:
-                    self.deleteShape(id)
+            elif len(outputID) == 1:
+                self.deleteShape(outputID[0])
                 return DrawingApp.SAFE
             else:
                 return DrawingApp.POSSIBLE
