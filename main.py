@@ -19,7 +19,7 @@ if __name__ == '__main__':
     app = DrawingApp(root, slotArray)
 
     # create process thread
-    processThread = ProcessThread(slotArray, app, verbose=True)
+    processThread = ProcessThread(slotArray, app, 0.8, verbose=True)
 
     # tkinter loop
     root.mainloop()

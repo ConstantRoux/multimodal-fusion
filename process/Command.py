@@ -1,5 +1,5 @@
 from interface import DrawingApp
-from slot.EDataType import ActionType, ShapeType, ColorType
+from slot.EDataType import ActionType, ShapeType, ColorType, DataType
 
 
 class Command:
@@ -35,9 +35,11 @@ class Command:
         self.position = []
 
         # for each data in the slot array
+        self.confidence = 1
         for data in self.slotArray:
             # update confidence
-            self.confidence *= data.confidence
+            if data.confidence < self.confidence:
+                self.confidence = data.confidence
 
             # switch between different data types
             # case ACTION
