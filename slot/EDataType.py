@@ -12,6 +12,7 @@ class ActionType(Enum):
     ADD = 0
     MOVE = 1
     DELETE = 2
+    QUIT = 3
 
 
 class ShapeType(Enum):

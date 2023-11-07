@@ -33,6 +33,9 @@
 
 			<item> deplacer  <tag> out = "MOVE" </tag></item>
 			<item> bouger  <tag> out = "MOVE" </tag></item>
+
+			<item> quitter <tag> out = "QUIT" </tag> </item>
+			<item> sortir <tag> out = "QUIT" </tag> </item>
 		</one-of>
 	</rule>
 

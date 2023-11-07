@@ -58,6 +58,11 @@ class Command:
         self.fillParams()
 
         # check possibility with the params
+        # action QUIT
+        if self.action is not None and self.action == ActionType.QUIT:
+           self.state = Command.POSSIBLE
+           return Command.POSSIBLE
+
         # action ADD
         if self.action is not None and self.action == ActionType.ADD:
             if self.shape is not None:

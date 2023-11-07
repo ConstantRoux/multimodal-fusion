@@ -23,3 +23,7 @@ if __name__ == '__main__':
 
     # tkinter loop
     root.mainloop()
+
+    # kill ivy agents
+    t2sAgent.stop()
+    g2sAgent.stop()

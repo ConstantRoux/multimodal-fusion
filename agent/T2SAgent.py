@@ -21,7 +21,8 @@ class T2SAgent(IvyServer):
         # TODO implement other kind of types
         action_dict = {ActionType.ADD: ["creer", "dessiner", "tracer"],
                        ActionType.MOVE: ["deplacer", "bouger"],
-                       ActionType.DELETE: ["supprimer", "effacer"]}
+                       ActionType.DELETE: ["supprimer", "effacer"],
+                       ActionType.QUIT: ["quitter", "sortir"]}
 
         shape_dict = {ShapeType.RECTANGLE: ["rectangle"],
                       ShapeType.CIRCLE: ["cercle"],
