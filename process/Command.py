@@ -1,4 +1,4 @@
-from slot.Data import Data
+from interface import DrawingApp
 from slot.EDataType import ActionType, ShapeType, ColorType
 
 
@@ -60,8 +60,8 @@ class Command:
         # check possibility with the params
         # action QUIT
         if self.action is not None and self.action == ActionType.QUIT:
-           self.state = Command.POSSIBLE
-           return Command.POSSIBLE
+            self.state = Command.POSSIBLE
+            return Command.POSSIBLE
 
         # action ADD
         if self.action is not None and self.action == ActionType.ADD:
@@ -94,3 +94,53 @@ class Command:
         else:
             self.state = Command.UNKNOWN
             return Command.UNKNOWN
+
+    def execute(self, drawingApp: DrawingApp) -> int:
+        # QUIT
+        if self.action == ActionType.QUIT:
+            return drawingApp.QUIT
+
+        # ADD
+        if self.action == ActionType.ADD:
+            if self.color is not None and len(self.position) >= 1:
+                drawingApp.createShape(self.shape, colorType=self.color, x=self.position[0][0], y=self.position[0][1])
+                drawingApp.updateConfidence(self.confidence)
+                return drawingApp.SAFE
+            else:
+                return drawingApp.POSSIBLE
+
+        # MOVE
+        elif self.action == ActionType.MOVE:
+            if len(self.position) == 1:
+                outputID = drawingApp.getObjectID(shapeType=self.shape, colorType=self.color)
+                if len(outputID) == 0:
+                    return drawingApp.IMPOSSIBLE
+                elif len(outputID) == 1:
+                    drawingApp.moveShape(outputID[0], self.position[0][0], self.position[0][1])
+                    drawingApp.updateConfidence(self.confidence)
+                    return drawingApp.SAFE
+                else:
+                    return drawingApp.POSSIBLE
+            elif len(self.position) >= 2:
+                outputID = drawingApp.getObjectID(x=self.position[0][0], y=self.position[0][1])
+                if len(outputID) == 0:
+                    return drawingApp.IMPOSSIBLE
+                elif len(outputID) == 1:
+                    drawingApp.moveShape(outputID[0], self.position[1][0], self.position[1][1])
+                    drawingApp.updateConfidence(self.confidence)
+                    return drawingApp.SAFE
+                else:
+                    return drawingApp.POSSIBLE
+
+        # DELETE
+        elif self.action == ActionType.DELETE:
+            outputID = drawingApp.getObjectID(shapeType=self.shape, colorType=self.color,
+                                        x=self.position[0][0] if len(self.position) > 0 else None,
+                                        y=self.position[0][1] if len(self.position) > 0 else None)
+            if len(outputID) == 0:
+                return drawingApp.IMPOSSIBLE
+            elif len(outputID) == 1:
+                drawingApp.deleteShape(outputID[0])
+                return drawingApp.SAFE
+            else:
+                return drawingApp.POSSIBLE

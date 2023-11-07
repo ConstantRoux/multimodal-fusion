@@ -2,18 +2,17 @@ import tkinter
 import tkinter as tk
 import numpy as np
 from interface.Object import Object
-from process.Command import Command
 from slot.Data import Data
-from slot.EDataType import ShapeType, ColorType, DataType, ActionType
-from slot.SlotArray import SlotArray
+from slot.EDataType import ShapeType, ColorType, DataType
 
 
 class DrawingApp:
     IMPOSSIBLE = -1
     POSSIBLE = 0
     SAFE = 2
+    QUIT = 3
 
-    def __init__(self, root: tkinter.Tk, slotArray: SlotArray, width: int = 800, height: int = 800, size: int = 50):
+    def __init__(self, root: tkinter.Tk, slotArray, width: int = 800, height: int = 800, size: int = 50):
         # args
         self.root = root
         self.slotArray = slotArray
