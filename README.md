@@ -60,11 +60,11 @@ Make sure you have the following dependencies installed before running the proje
 - **Python 3.x:** The project requires Python 3.0 or a later version.
 - **NumPy:** NumPy is a fundamental package for scientific computing with Python. To install it, use the following command:
     ```
-    sudo pip install numpy
+    pip install numpy
     ```
 - **Ivy-Python:** Ivy is a custom software bus used in this project. To install it, use the following command:
     ```
-    sudo pip install ivy-python
+    pip install ivy-python
     ```
 
 ### &rarr; Installation
