@@ -2,6 +2,7 @@ import tkinter
 import tkinter as tk
 import numpy as np
 from interface.Object import Object
+from slot import SlotArray
 from slot.Data import Data
 from slot.EDataType import ShapeType, ColorType, DataType
 
@@ -12,7 +13,7 @@ class DrawingApp:
     SAFE = 2
     QUIT = 3
 
-    def __init__(self, root: tkinter.Tk, slotArray, width: int = 800, height: int = 800, size: int = 50):
+    def __init__(self, root: tkinter.Tk, slotArray: SlotArray, width: int = 800, height: int = 800, size: int = 50):
         # args
         self.root = root
         self.slotArray = slotArray
@@ -35,7 +36,7 @@ class DrawingApp:
         # objects on the canvas
         self.objects = {}
 
-    def updateConfidence(self, confidence):
+    def updateConfidence(self, confidence: float):
         self.label.config(text=f"Confidence: {confidence:.2f}")
 
     def leftClickHandle(self, event):
