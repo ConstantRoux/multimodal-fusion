@@ -28,7 +28,7 @@ The system operates based on the following general principles:
    1. The Process Thread reads data from the FIFO and stores it in the Slot Array, a table containing the latest received data (this table is periodically reset).
    2. It attempts to generate a possible command and verifies its coherence by communicating with the AppThread, which manages the application and its interface.
 
-3. AppThread Execution:
+3. **AppThread Execution:**
    1. The AppThread examines the commands to be sent and executes them.
    2. It has the capability to manage all shapes present on the screen.
 
